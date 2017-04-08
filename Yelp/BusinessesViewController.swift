@@ -15,7 +15,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     var businesses: [Business]!
     var searchBar: UISearchBar!
     var isMoreDataLoading = false
-    var offset = 0
+    var currentOffset = 0
     
     var currentSearchText = "Restaurants"
     var selectedCategories: [String]!
@@ -41,6 +41,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     func reloadResults() {
         print("reloading results")
+        var offset = 0
+        if isMoreDataLoading {
+            offset = currentOffset
+        }
+        
         Business.searchWithTerm(term: currentSearchText, offset: offset, sort: nil, categories: selectedCategories, deals: nil) { (businesses:[Business]?, error: Error?) -> Void in
             if self.isMoreDataLoading && (businesses != nil) {
                 self.businesses.append(contentsOf: businesses!)
@@ -55,12 +60,14 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     // MARK: - Search bar methods
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         currentSearchText = searchText
+        currentOffset = 0
         reloadResults()
     }
     
     // MARK: - FiltersViewController methods
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         selectedCategories = filters["categories"] as? [String]
+        currentOffset = 0
         reloadResults()
     }
     
@@ -97,7 +104,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             // When the user has scrolled past the threshold, start requesting
             if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
                 isMoreDataLoading = true
-                offset += 1
+                currentOffset += 1
                 reloadResults()
             }
         }
