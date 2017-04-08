@@ -20,7 +20,11 @@ class BusinessCell: UITableViewCell {
     var business: Business! {
         didSet {
             nameLabel.text = business.name
-            businessImage.setImageWith(business.imageURL!)
+            if business.imageURL != nil {
+                businessImage.setImageWith(business.imageURL!)
+            } else {
+                businessImage.image = #imageLiteral(resourceName: "yelp_icon")
+            }
             ratingsImage.setImageWith(business.ratingImageURL!)
             numReviewsLabel.text = "\(business.reviewCount!) reviews"
             distanceLabel.text = business.distance!

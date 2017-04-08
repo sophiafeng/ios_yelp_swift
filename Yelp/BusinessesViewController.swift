@@ -8,60 +8,60 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate, UISearchBarDelegate, UIScrollViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
     var businesses: [Business]!
+    var searchBar: UISearchBar!
+    var isMoreDataLoading = false
+    var offset = 0
+    
+    var currentSearchText = "Restaurants"
+    var selectedCategories: [String]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Set up tableview
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120 // used to ball park a scroll height, when autolayout is calculating
         
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
-            
-            self.businesses = businesses
-            self.tableView.reloadData()
-            if let businesses = businesses {
-                for business in businesses {
-                    print(business.name!)
-                    print(business.address!)
-                }
-            }
-            
-            }
-        )
+        // Search bar set up
+        searchBar = UISearchBar()
+        searchBar.text = currentSearchText
+        searchBar.sizeToFit()
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
         
-        /* Example of Yelp search with more search options specified
-         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-         self.businesses = businesses
-         
-         for business in businesses {
-         print(business.name!)
-         print(business.address!)
-         }
-         }
-         */
-        
+        reloadResults()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func reloadResults() {
+        print("reloading results")
+        Business.searchWithTerm(term: currentSearchText, offset: offset, sort: nil, categories: selectedCategories, deals: nil) { (businesses:[Business]?, error: Error?) -> Void in
+            if self.isMoreDataLoading && (businesses != nil) {
+                self.businesses.append(contentsOf: businesses!)
+                self.isMoreDataLoading = false
+            } else {
+                self.businesses = businesses
+            }
+            self.tableView.reloadData()
+        }
+    }
+    
+    // MARK: - Search bar methods
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        currentSearchText = searchText
+        reloadResults()
     }
     
     // MARK: - FiltersViewController methods
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-        
-        let categories = filters["categories"] as? [String]
-        Business.searchWithTerm(term: "Restaurant", sort: nil, categories: categories, deals: nil) { (businesses:[Business]?, error: Error?) -> Void in
-            self.businesses = businesses
-            self.tableView.reloadData()
-        }
+        selectedCategories = filters["categories"] as? [String]
+        reloadResults()
     }
     
     // MARK: - Navigation methods
@@ -85,5 +85,21 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
         cell.business = businesses[indexPath.row]
         return cell
+    }
+    
+    // MARK: - ScrollViewDelegate methods
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                isMoreDataLoading = true
+                offset += 1
+                reloadResults()
+            }
+        }
     }
 }

@@ -67,7 +67,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBAction func onSearch(_ sender: Any) {
         dismiss(animated: true, completion: nil)
         
-        let filters = [String:AnyObject]()
+        var filters = [String:AnyObject]()
         
         var selectedCategories = [String]()
         for (row, isSelected) in switchStates {
@@ -76,6 +76,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
         
+        if selectedCategories.count > 0 {
+            filters["categories"] = selectedCategories as AnyObject
+        }
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
     
