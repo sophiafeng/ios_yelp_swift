@@ -108,7 +108,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "LabelCell", for: indexPath) as! LabelCell
-            cell.textLabel?.text = "Oops, no results! Please try searching with new filters!"
+            cell.textLabel?.text = "No results found!"
             return cell
         }
     }
