@@ -22,6 +22,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // Categories dictionary and switch sttaes
     var categories: [[String:String]]!
     var switchStates = [Int:Bool]()
+    var expandAllCategories = false
     
     // Filter by deals flag
     var filterDeals = false
@@ -33,7 +34,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // Sort
     var displayAllSorts = false
     var selectedSort = YelpSortMode.BestMatched.rawValue
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -100,13 +101,18 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 cell.sortLabel.text = yelpSorts()[indexPath.row]
             }
             return cell
-        } else { //else if indexPath.section == 2 {  // Categories section
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
-            
-            cell.switchLabel.text = categories[indexPath.row]["name"]
-            cell.delegate = self
-            cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
-            return cell
+        } else {  // Categories section
+            if !expandAllCategories && indexPath.row == 3 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "LabelCell", for: indexPath) as! LabelCell
+                cell.textLabel?.text = "See All"
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
+                cell.switchLabel.text = categories[indexPath.row]["name"]
+                cell.delegate = self
+                cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
+                return cell
+            }
         }
     }
     
@@ -145,6 +151,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             displayAllSorts = !displayAllSorts
             tableView.reloadData()
+        } else if indexPath.section == 3 {  // categories section
+            if !expandAllCategories && indexPath.row == 3 {
+                expandAllCategories = !expandAllCategories
+                tableView.reloadData()
+            }
         }
     }
     
@@ -156,8 +167,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if section == 2 {
             return displayAllSorts ? 3 : 1
         } else if section == 3 {  // Categories section
-            print("\(categories.count)")
-            return categories.count
+            if expandAllCategories {
+                return categories.count
+            }
+            return 4
         }
         return 1
     }
@@ -175,7 +188,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // MARK: - Bar button actions
-    
     @IBAction func onCancel(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -209,7 +221,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // MARK: Utility function for category name and API code
-    
     func yelpCategories() -> [[String:String]] {
         return   [["name" : "Afghan", "code": "afghani"],
                   ["name" : "African", "code": "african"],

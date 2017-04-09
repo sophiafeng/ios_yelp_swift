@@ -11,7 +11,7 @@ import UIKit
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate, UISearchBarDelegate, UIScrollViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    
+
     let DEFAULT_RESULT_LIMIT = 20
     var businesses: [Business]!
     var searchBar: UISearchBar!
@@ -94,17 +94,23 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
 
     // MARK: - Table view data source methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if businesses != nil {
+        if businesses != nil && businesses.count > 0 {
             return businesses.count
         } else {
-            return 0
+            return 1
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
-        cell.business = businesses[indexPath.row]
-        return cell
+        if businesses != nil && businesses.count > 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
+            cell.business = businesses[indexPath.row]
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LabelCell", for: indexPath) as! LabelCell
+            cell.textLabel?.text = "Oops, no results! Please try searching with new filters!"
+            return cell
+        }
     }
     
     // MARK: - ScrollViewDelegate methods
