@@ -22,7 +22,23 @@ enum YelpSortMode: Int {
 }
 
 enum YelpDistanceMode: Int {
-    case BestMatch, TwoBlocks, SixBlocks, OneMile, FiveMiles
+    case BestMatch = 0, TwoBlocks, SixBlocks, OneMile, FiveMiles
+    
+    func getMeters() -> Int {
+        switch self {
+        case .BestMatch:
+            return 322
+        case .TwoBlocks:
+            return 322
+        case .SixBlocks:
+            return 966
+        case .OneMile:
+            return 1609
+        case .FiveMiles:
+            return 8047
+        }
+        
+    }
 }
 
 class YelpClient: BDBOAuth1RequestOperationManager {
@@ -51,13 +67,14 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         return searchWithTerm(term, sort: nil, categories: nil, deals: nil, distance: nil, completion: completion)
     }
     
-    func searchWithTerm(_ term: String, offset: Int = 0, sort: YelpSortMode?, categories: [String]?, deals: Bool?, distance: YelpDistanceMode?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
+    func searchWithTerm(_ term: String, offset: Int = 0, limit: Int = 20, sort: YelpSortMode?, categories: [String]?, deals: Bool?, distance: YelpDistanceMode?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
         // For additional parameters, see http://www.yelp.com/developers/documentation/v2/search_api
         
         // Default the location to San Francisco
         var parameters: [String : AnyObject] = ["term": term as AnyObject, "ll": "37.785771,-122.406165" as AnyObject]
         
         parameters["offset"] = offset as AnyObject
+        parameters["limit"] = limit as AnyObject
         
         if sort != nil {
             parameters["sort"] = sort!.rawValue as AnyObject?
@@ -71,8 +88,8 @@ class YelpClient: BDBOAuth1RequestOperationManager {
             parameters["deals_filter"] = deals! as AnyObject?
         }
         
-        if distance != nil {
-            // todo calculate radius_filter here
+        if distance != nil && distance != YelpDistanceMode.BestMatch {
+            parameters["radius_filter"] = distance!.getMeters() as AnyObject?
         }
         
         print(parameters)

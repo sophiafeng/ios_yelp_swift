@@ -12,6 +12,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     @IBOutlet weak var tableView: UITableView!
     
+    let DEFAULT_RESULT_LIMIT = 20
     var businesses: [Business]!
     var searchBar: UISearchBar!
     var isMoreDataLoading = false
@@ -49,8 +50,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             offset = currentOffset
         }
         
-        Business.searchWithTerm(term: currentSearchText, offset: offset, sort: YelpSortMode(rawValue: sortByValue), categories: selectedCategories, deals: filterDeals, distance: YelpDistanceMode(rawValue: distanceValue)) { (businesses:[Business]?, error: Error?) -> Void in
-            if self.isMoreDataLoading && (businesses != nil) {
+        Business.searchWithTerm(term: currentSearchText, offset: offset, limit: DEFAULT_RESULT_LIMIT, sort: YelpSortMode(rawValue: sortByValue), categories: selectedCategories, deals: filterDeals, distance: YelpDistanceMode(rawValue: distanceValue)) { (businesses:[Business]?, error: Error?) -> Void in
+            if self.isMoreDataLoading && offset > 0 && (businesses != nil) {
                 self.businesses.append(contentsOf: businesses!)
                 self.isMoreDataLoading = false
             } else {
@@ -71,8 +72,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         selectedCategories = filters["categories"] as? [String]
         filterDeals = (filters["deals"] as? Bool) ?? false
-        distanceValue = (filters["distance"] as? Int) ?? -1
-        sortByValue = (filters["sort"] as? Int) ?? 0
+        distanceValue = (filters["distance"] as? Int) ?? YelpDistanceMode.BestMatch.rawValue
+        sortByValue = (filters["sort"] as? Int) ?? YelpSortMode.BestMatched.rawValue
         currentOffset = 0
         reloadResults()
     }
@@ -110,7 +111,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             // When the user has scrolled past the threshold, start requesting
             if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
                 isMoreDataLoading = true
-                currentOffset += 1
+                currentOffset += DEFAULT_RESULT_LIMIT
                 reloadResults()
             }
         }
