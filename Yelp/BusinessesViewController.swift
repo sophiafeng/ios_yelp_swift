@@ -51,11 +51,17 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         }
         
         Business.searchWithTerm(term: currentSearchText, offset: offset, limit: DEFAULT_RESULT_LIMIT, sort: YelpSortMode(rawValue: sortByValue), categories: selectedCategories, deals: filterDeals, distance: YelpDistanceMode(rawValue: distanceValue)) { (businesses:[Business]?, error: Error?) -> Void in
+            
             if self.isMoreDataLoading && offset > 0 && (businesses != nil) {
+                // Load more businesses
                 self.businesses.append(contentsOf: businesses!)
                 self.isMoreDataLoading = false
-            } else {
+            } else if businesses != nil {
+                // Set query results to current set of businesses
                 self.businesses = businesses
+            } else {
+                // We are not loading more businesses and query results are nil
+                self.businesses = []
             }
             self.tableView.reloadData()
         }
