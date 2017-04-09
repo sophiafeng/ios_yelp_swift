@@ -27,11 +27,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var filterDeals = false
     
     // Distance dictionary and display all flag
-//    var distances: [String:Int]!
     var displayAllDistances = false
-//    var selectedDistanceIndex = 0
     var selectedDistance = YelpDistanceMode.BestMatch.rawValue
-    //    var distancesKeys: [String]!
     
     // Sort
     var displayAllSorts = false
@@ -80,6 +77,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if indexPath.section == 1 {  // Distances section
             let cell = tableView.dequeueReusableCell(withIdentifier: "DistanceCell", for: indexPath) as! DistanceCell
             if indexPath.row == 0 {
+                if displayAllDistances {
+                    cell.dropDownImage.image = #imageLiteral(resourceName: "arrowdown")
+                } else {
+                    cell.dropDownImage.image = #imageLiteral(resourceName: "arrowleft")
+                }
                 cell.distanceLabel.text = yelpDistances()[selectedDistance]
             } else {
                 cell.distanceLabel.text = yelpDistances()[indexPath.row]
@@ -88,6 +90,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if indexPath.section == 2 {  // Sort section
             let cell = tableView.dequeueReusableCell(withIdentifier: "SortCell", for: indexPath) as! SortCell
             if indexPath.row == 0 {
+                if displayAllSorts {
+                    cell.dropDownImage.image = #imageLiteral(resourceName: "arrowdown")
+                } else {
+                    cell.dropDownImage.image = #imageLiteral(resourceName: "arrowleft")
+                }
                 cell.sortLabel.text = yelpSorts()[selectedSort]
             } else {
                 cell.sortLabel.text = yelpSorts()[indexPath.row]
@@ -378,11 +385,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // Distance name to distance in meters
     func yelpDistances() -> [Int: String] {
         return [
-//            "Best Match": -1,
-//            "2 blocks": 322,
-//            "6 blocks": 966,
-//            "1 mile": 1609,
-//            "5 miles": 8047
             YelpDistanceMode.BestMatch.rawValue: "Best Match",
             YelpDistanceMode.TwoBlocks.rawValue: "2 blocks",
             YelpDistanceMode.SixBlocks.rawValue: "6 blocks",

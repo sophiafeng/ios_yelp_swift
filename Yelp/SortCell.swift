@@ -11,10 +11,10 @@ import UIKit
 class SortCell: UITableViewCell {
 
     @IBOutlet weak var sortLabel: UILabel!
+    @IBOutlet weak var dropDownImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
