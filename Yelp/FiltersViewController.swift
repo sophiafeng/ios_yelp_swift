@@ -27,27 +27,20 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var filterDeals = false
     
     // Distance dictionary and display all flag
-    var distances: [String:Int]!
+//    var distances: [String:Int]!
     var displayAllDistances = false
-    var selectedDistanceIndex = 0
-    var selectedDistance = "Best Match"
-    var distancesKeys: [String]!
+//    var selectedDistanceIndex = 0
+    var selectedDistance = YelpDistanceMode.BestMatch.rawValue
+    //    var distancesKeys: [String]!
     
     // Sort
-    var sorts : [String:Int]!
     var displayAllSorts = false
-    var selectedSortIndex = 0
-    var selectedSort = "Best Match"
-    var sortKeys: [String]!
-    
+    var selectedSort = YelpSortMode.BestMatched.rawValue
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
         categories = yelpCategories()
-        distances = yelpDistances()
-        distancesKeys = Array(self.distances.keys)
-        sorts = yelpSorts()
-        sortKeys = Array(self.sorts.keys)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -87,17 +80,17 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if indexPath.section == 1 {  // Distances section
             let cell = tableView.dequeueReusableCell(withIdentifier: "DistanceCell", for: indexPath) as! DistanceCell
             if indexPath.row == 0 {
-                cell.distanceLabel.text = selectedDistance
+                cell.distanceLabel.text = yelpDistances()[selectedDistance]
             } else {
-                cell.distanceLabel.text = distancesKeys[indexPath.row]
+                cell.distanceLabel.text = yelpDistances()[indexPath.row]
             }
             return cell
         } else if indexPath.section == 2 {  // Sort section
             let cell = tableView.dequeueReusableCell(withIdentifier: "SortCell", for: indexPath) as! SortCell
             if indexPath.row == 0 {
-                cell.sortLabel.text = selectedSort
+                cell.sortLabel.text = yelpSorts()[selectedSort]
             } else {
-                cell.sortLabel.text = sortKeys[indexPath.row]
+                cell.sortLabel.text = yelpSorts()[indexPath.row]
             }
             return cell
         } else { //else if indexPath.section == 2 {  // Categories section
@@ -114,18 +107,16 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         if indexPath.section == 1 {  // Distances section
             if indexPath.row == 0 {
                 displayAllDistances = !displayAllDistances
-                selectedDistance = "Best Match"
+                selectedDistance = YelpDistanceMode.BestMatch.rawValue
                 if !displayAllDistances {
-                    selectedDistanceIndex = indexPath.row
+                    selectedDistance = indexPath.row
                 }
                 tableView.reloadData()
                 return
             }
             
             if displayAllDistances {
-                let cell = tableView.cellForRow(at: indexPath) as! DistanceCell
-                selectedDistanceIndex = indexPath.row
-                selectedDistance = cell.distanceLabel.text!
+                selectedDistance = indexPath.row
             }
             
             displayAllDistances = !displayAllDistances
@@ -133,18 +124,16 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if indexPath.section == 2 {  // sort section
             if indexPath.row == 0 {
                 displayAllSorts = !displayAllSorts
-                selectedSort = "Best Match"
+                selectedSort = YelpSortMode.BestMatched.rawValue
                 if !displayAllSorts {
-                    selectedSortIndex = indexPath.row
+                    selectedSort = indexPath.row
                 }
                 tableView.reloadData()
                 return
             }
             
             if displayAllSorts {
-                let cell = tableView.cellForRow(at: indexPath) as! SortCell
-                selectedSortIndex = indexPath.row
-                selectedSort = cell.sortLabel.text!
+                selectedSort = indexPath.row
             }
             
             displayAllSorts = !displayAllSorts
@@ -156,9 +145,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         if section == 0 { // Deal section
             return 1
         } else if section == 1 {  // distances section
-            return displayAllDistances ? (distances.count) : 1
+            return displayAllDistances ? 5 : 1
         } else if section == 2 {
-            return displayAllSorts ? (sorts.count) : 1
+            return displayAllSorts ? 3 : 1
         } else if section == 3 {  // Categories section
             print("\(categories.count)")
             return categories.count
@@ -204,10 +193,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         filters["deals"] = filterDeals as AnyObject
         
         // Set distance filter value in filters dict
-        filters["distance"] = self.distances[self.selectedDistance] as AnyObject
+        filters["distance"] = self.selectedDistance as AnyObject
         
         // Set sort value in filters dict
-        filters["sort"] = self.sorts[self.selectedSort] as AnyObject
+        filters["sort"] = self.selectedSort as AnyObject
         
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
@@ -387,22 +376,27 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // Distance name to distance in meters
-    func yelpDistances() -> [String: Int] {
+    func yelpDistances() -> [Int: String] {
         return [
-            "Best Match": -1,
-            "2 blocks": 322,
-            "6 blocks": 966,
-            "1 mile": 1609,
-            "5 miles": 8047
+//            "Best Match": -1,
+//            "2 blocks": 322,
+//            "6 blocks": 966,
+//            "1 mile": 1609,
+//            "5 miles": 8047
+            YelpDistanceMode.BestMatch.rawValue: "Best Match",
+            YelpDistanceMode.TwoBlocks.rawValue: "2 blocks",
+            YelpDistanceMode.SixBlocks.rawValue: "6 blocks",
+            YelpDistanceMode.OneMile.rawValue: "1 mile",
+            YelpDistanceMode.FiveMiles.rawValue: "5 miles"
         ]
     }
     
-    // Sort by name to value
-    func yelpSorts() -> [String: Int] {
+    // Sort by index to name
+    func yelpSorts() -> [Int: String] {
         return [
-            "Best Match": 0,
-            "Distance": 1,
-            "Highest rated": 2
+            YelpSortMode.BestMatched.rawValue: "Best Match",
+            YelpSortMode.Distance.rawValue: "Distance",
+            YelpSortMode.HighestRated.rawValue: "Highest rated"
         ]
     }
 

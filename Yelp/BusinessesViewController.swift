@@ -49,7 +49,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             offset = currentOffset
         }
         
-        Business.searchWithTerm(term: currentSearchText, offset: offset, sort: YelpSortMode(rawValue: sortByValue), categories: selectedCategories, deals: filterDeals) { (businesses:[Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: currentSearchText, offset: offset, sort: YelpSortMode(rawValue: sortByValue), categories: selectedCategories, deals: filterDeals, distance: YelpDistanceMode(rawValue: distanceValue)) { (businesses:[Business]?, error: Error?) -> Void in
             if self.isMoreDataLoading && (businesses != nil) {
                 self.businesses.append(contentsOf: businesses!)
                 self.isMoreDataLoading = false
