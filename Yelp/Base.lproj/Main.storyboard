@@ -150,19 +150,102 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="98" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="VFG-iJ-SQQ">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="98" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="VFG-iJ-SQQ">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="DealCell" id="CGm-BX-gQN" customClass="DealCell" customModule="Yelp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="56" width="375" height="98"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CGm-BX-gQN" id="5bH-4z-ojw">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="98"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rX8-MV-n9s">
+                                                    <rect key="frame" x="314" y="34" width="51" height="31"/>
+                                                </switch>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Offering a Deal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEe-Vb-GxD">
+                                                    <rect key="frame" x="12" y="39" width="115" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20.5" id="GL9-UK-7hf"/>
+                                                        <constraint firstAttribute="width" constant="115" id="YIa-Zf-smz"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="pEe-Vb-GxD" firstAttribute="centerY" secondItem="5bH-4z-ojw" secondAttribute="centerY" id="Rrx-HJ-Xbv"/>
+                                                <constraint firstItem="rX8-MV-n9s" firstAttribute="centerY" secondItem="5bH-4z-ojw" secondAttribute="centerY" id="hqa-y4-y7q"/>
+                                                <constraint firstAttribute="trailing" secondItem="rX8-MV-n9s" secondAttribute="trailing" constant="12" id="iQX-mt-Pbf"/>
+                                                <constraint firstItem="pEe-Vb-GxD" firstAttribute="leading" secondItem="5bH-4z-ojw" secondAttribute="leading" constant="12" id="xc6-QO-jyN"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="dealLabel" destination="pEe-Vb-GxD" id="EDb-WA-tDV"/>
+                                            <outlet property="dealSwitch" destination="rX8-MV-n9s" id="5XG-aV-YXN"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DistanceCell" id="HXR-Nh-PwG" customClass="DistanceCell" customModule="Yelp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="153.5" width="375" height="98"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HXR-Nh-PwG" id="Yfu-FJ-670">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="97.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZOh-Qq-qru">
+                                                    <rect key="frame" x="12" y="12" width="351" height="74"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ZOh-Qq-qru" firstAttribute="top" secondItem="Yfu-FJ-670" secondAttribute="top" constant="12" id="GwN-As-XsS"/>
+                                                <constraint firstAttribute="trailing" secondItem="ZOh-Qq-qru" secondAttribute="trailing" constant="12" id="LEC-f2-GfP"/>
+                                                <constraint firstAttribute="bottom" secondItem="ZOh-Qq-qru" secondAttribute="bottom" constant="12" id="mFY-n7-lBZ"/>
+                                                <constraint firstItem="ZOh-Qq-qru" firstAttribute="leading" secondItem="Yfu-FJ-670" secondAttribute="leading" constant="12" id="mlQ-We-ieQ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="distanceLabel" destination="ZOh-Qq-qru" id="gyu-iv-JSx"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SortCell" id="gii-pM-a7R" customClass="SortCell" customModule="Yelp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="252" width="375" height="98"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gii-pM-a7R" id="ENw-50-28h">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="98"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Lo-Wa-45N">
+                                                    <rect key="frame" x="12" y="12" width="351" height="73.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="7Lo-Wa-45N" secondAttribute="trailing" constant="12" id="cd7-rm-nlr"/>
+                                                <constraint firstItem="7Lo-Wa-45N" firstAttribute="top" secondItem="ENw-50-28h" secondAttribute="top" constant="12" id="g6I-0R-b8G"/>
+                                                <constraint firstItem="7Lo-Wa-45N" firstAttribute="leading" secondItem="ENw-50-28h" secondAttribute="leading" constant="12" id="qS9-HP-b6b"/>
+                                                <constraint firstAttribute="bottom" secondItem="7Lo-Wa-45N" secondAttribute="bottom" constant="12" id="quj-EY-1TH"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="sortLabel" destination="7Lo-Wa-45N" id="4Yl-fB-GjH"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="98" id="OiT-Xr-mgu" customClass="SwitchCell" customModule="Yelp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="98"/>
+                                        <rect key="frame" x="0.0" y="349.5" width="375" height="98"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OiT-Xr-mgu" id="V6H-nv-0S4">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="97.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VrP-uL-K2p">
-                                                    <rect key="frame" x="12" y="38" width="42" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VrP-uL-K2p">
+                                                    <rect key="frame" x="12" y="38" width="111" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -172,10 +255,10 @@
                                                 </switch>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="yob-5l-enK" secondAttribute="trailing" constant="12" id="REx-38-pxr"/>
+                                                <constraint firstAttribute="trailing" secondItem="yob-5l-enK" secondAttribute="trailing" constant="12" id="Dt0-fT-ABp"/>
                                                 <constraint firstItem="VrP-uL-K2p" firstAttribute="centerY" secondItem="V6H-nv-0S4" secondAttribute="centerY" id="TKe-ud-Dz3"/>
                                                 <constraint firstItem="yob-5l-enK" firstAttribute="centerY" secondItem="V6H-nv-0S4" secondAttribute="centerY" id="a9D-cj-74j"/>
-                                                <constraint firstItem="VrP-uL-K2p" firstAttribute="leading" secondItem="V6H-nv-0S4" secondAttribute="leading" constant="12" id="xdA-Ih-pl8"/>
+                                                <constraint firstItem="VrP-uL-K2p" firstAttribute="leading" secondItem="V6H-nv-0S4" secondAttribute="leading" constant="12" id="m2H-S5-roP"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>

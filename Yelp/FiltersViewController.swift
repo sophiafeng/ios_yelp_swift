@@ -13,22 +13,46 @@ import UIKit
         didUpdateFilters filters: [String:AnyObject])
 }
 
-class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
+class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate, DealCellDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
     weak var delegate: FiltersViewControllerDelegate?
     
+    // Categories dictionary and switch sttaes
     var categories: [[String:String]]!
     var switchStates = [Int:Bool]()
+    
+    // Filter by deals flag
+    var filterDeals = false
+    
+    // Distance dictionary and display all flag
+    var distances: [String:Int]!
+    var displayAllDistances = false
+    var selectedDistanceIndex = 0
+    var selectedDistance = "Best Match"
+    var distancesKeys: [String]!
+    
+    // Sort
+    var sorts : [String:Int]!
+    var displayAllSorts = false
+    var selectedSortIndex = 0
+    var selectedSort = "Best Match"
+    var sortKeys: [String]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         categories = yelpCategories()
+        distances = yelpDistances()
+        distancesKeys = Array(self.distances.keys)
+        sorts = yelpSorts()
+        sortKeys = Array(self.sorts.keys)
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 70
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,25 +61,121 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // MARK: - Table view data source methods
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 4
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {  // Deals filter section
+            return "Deals"
+        } else if section == 1 { // Distances filter
+            return "Distance"
+        } else if section == 2 { // Sort by section
+            return "Sort"
+        } else {  // Categories filter section
+            return "Categories"
+        }
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
-        
-        cell.switchLabel.text = categories[indexPath.row]["name"]
-        cell.delegate = self
-        cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
-        
-        return cell
+        if indexPath.section == 0 {  // Deals filter section
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DealCell", for: indexPath) as! DealCell
+            cell.dealLabel.text = "Offering a Deal"
+            cell.delegate = self
+            cell.dealSwitch.isOn = filterDeals
+            return cell
+        } else if indexPath.section == 1 {  // Distances section
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DistanceCell", for: indexPath) as! DistanceCell
+            if indexPath.row == 0 {
+                cell.distanceLabel.text = selectedDistance
+            } else {
+                cell.distanceLabel.text = distancesKeys[indexPath.row]
+            }
+            return cell
+        } else if indexPath.section == 2 {  // Sort section
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SortCell", for: indexPath) as! SortCell
+            if indexPath.row == 0 {
+                cell.sortLabel.text = selectedSort
+            } else {
+                cell.sortLabel.text = sortKeys[indexPath.row]
+            }
+            return cell
+        } else { //else if indexPath.section == 2 {  // Categories section
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
+            
+            cell.switchLabel.text = categories[indexPath.row]["name"]
+            cell.delegate = self
+            cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {  // Distances section
+            if indexPath.row == 0 {
+                displayAllDistances = !displayAllDistances
+                selectedDistance = "Best Match"
+                if !displayAllDistances {
+                    selectedDistanceIndex = indexPath.row
+                }
+                tableView.reloadData()
+                return
+            }
+            
+            if displayAllDistances {
+                let cell = tableView.cellForRow(at: indexPath) as! DistanceCell
+                selectedDistanceIndex = indexPath.row
+                selectedDistance = cell.distanceLabel.text!
+            }
+            
+            displayAllDistances = !displayAllDistances
+            tableView.reloadData()
+        } else if indexPath.section == 2 {  // sort section
+            if indexPath.row == 0 {
+                displayAllSorts = !displayAllSorts
+                selectedSort = "Best Match"
+                if !displayAllSorts {
+                    selectedSortIndex = indexPath.row
+                }
+                tableView.reloadData()
+                return
+            }
+            
+            if displayAllSorts {
+                let cell = tableView.cellForRow(at: indexPath) as! SortCell
+                selectedSortIndex = indexPath.row
+                selectedSort = cell.sortLabel.text!
+            }
+            
+            displayAllSorts = !displayAllSorts
+            tableView.reloadData()
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories!.count // implicit optional ok since categories always populated
+        if section == 0 { // Deal section
+            return 1
+        } else if section == 1 {  // distances section
+            return displayAllDistances ? (distances.count) : 1
+        } else if section == 2 {
+            return displayAllSorts ? (sorts.count) : 1
+        } else if section == 3 {  // Categories section
+            print("\(categories.count)")
+            return categories.count
+        }
+        return 1
     }
+    
     
     // MARK: - SwitchCellDelegate methods
     func switchCell(switchCell: SwitchCell, didChange value: Bool) {
         let indexPath = tableView.indexPath(for: switchCell)!
         switchStates[indexPath.row] = value
+    }
+    
+    // MARK: - DealCellDelegate methods
+    func dealCell(dealCell: DealCell, didChange value: Bool) {
+        filterDeals = value
     }
     
     // MARK: - Bar button actions
@@ -69,16 +189,26 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         var filters = [String:AnyObject]()
         
+        // Set selected categories in filters dict
         var selectedCategories = [String]()
         for (row, isSelected) in switchStates {
             if isSelected {
                 selectedCategories.append(categories[row]["code"]!)
             }
         }
-        
         if selectedCategories.count > 0 {
             filters["categories"] = selectedCategories as AnyObject
         }
+        
+        // Set filter deal switch value in filters dict
+        filters["deals"] = filterDeals as AnyObject
+        
+        // Set distance filter value in filters dict
+        filters["distance"] = self.distances[self.selectedDistance] as AnyObject
+        
+        // Set sort value in filters dict
+        filters["sort"] = self.sorts[self.selectedSort] as AnyObject
+        
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
     
@@ -254,6 +384,26 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                   ["name" : "Wok", "code": "wok"],
                   ["name" : "Wraps", "code": "wraps"],
                   ["name" : "Yugoslav", "code": "yugoslav"]]
+    }
+    
+    // Distance name to distance in meters
+    func yelpDistances() -> [String: Int] {
+        return [
+            "Best Match": -1,
+            "2 blocks": 322,
+            "6 blocks": 966,
+            "1 mile": 1609,
+            "5 miles": 8047
+        ]
+    }
+    
+    // Sort by name to value
+    func yelpSorts() -> [String: Int] {
+        return [
+            "Best Match": 0,
+            "Distance": 1,
+            "Highest rated": 2
+        ]
     }
 
 }

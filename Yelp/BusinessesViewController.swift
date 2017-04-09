@@ -19,6 +19,9 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     var currentSearchText = "Restaurants"
     var selectedCategories: [String]!
+    var filterDeals = false
+    var sortByValue = 0
+    var distanceValue = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +49,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             offset = currentOffset
         }
         
-        Business.searchWithTerm(term: currentSearchText, offset: offset, sort: nil, categories: selectedCategories, deals: nil) { (businesses:[Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: currentSearchText, offset: offset, sort: YelpSortMode(rawValue: sortByValue), categories: selectedCategories, deals: filterDeals) { (businesses:[Business]?, error: Error?) -> Void in
             if self.isMoreDataLoading && (businesses != nil) {
                 self.businesses.append(contentsOf: businesses!)
                 self.isMoreDataLoading = false
@@ -64,9 +67,12 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         reloadResults()
     }
     
-    // MARK: - FiltersViewController methods
+    // MARK: - FiltersViewControllerDelegate methods
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         selectedCategories = filters["categories"] as? [String]
+        filterDeals = (filters["deals"] as? Bool) ?? false
+        distanceValue = (filters["distance"] as? Int) ?? -1
+        sortByValue = (filters["sort"] as? Int) ?? 0
         currentOffset = 0
         reloadResults()
     }

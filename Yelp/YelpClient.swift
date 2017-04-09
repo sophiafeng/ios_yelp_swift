@@ -21,6 +21,10 @@ enum YelpSortMode: Int {
     case bestMatched = 0, distance, highestRated
 }
 
+enum YelpDistanceMode: Int {
+    case BestMatch, TwoBlocks, SixBlocks, OneMile, FiveMiles
+}
+
 class YelpClient: BDBOAuth1RequestOperationManager {
     var accessToken: String!
     var accessSecret: String!
