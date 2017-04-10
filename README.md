@@ -2,7 +2,7 @@
 
 **Yelp** is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
 
-Time spent: **X** hours spent in total
+Time spent: **11** hours spent in total
 
 ## User Stories
 
@@ -37,19 +37,23 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. Refactoring, specifically reducing the bulk of logic in FiltersViewController
+1. Refactoring, specifically simplifying and reducing the bulk of logic in FiltersViewController and creating generic UITableViewCell classes to encompass different types of cells
+2. Debugging autolayout issues 
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://imgur.com/sCJeaAt.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+Infinite scroll:
+<img src='http://imgur.com/e5mDOEJ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+My FiltersViewController got really complicated, especially in dealing with the the cells/sections in the table view delegate methods. It was really difficult to debug off by 1 issues as a result. I spent a good amount of time playing around with autolayout and was stumped on unexpected results of contraints that were accidentally set with "Constrain to margins" checked. There is a lot of duplicate logic, so if I had more time, I'd do a bigger refactor to create a generic FilterSettings class to encompass all of the different filter labels and actionable switches/dropdowns. I noticed it was difficult to add more features when the codebase is complicated.
 
 ## License
 
