@@ -28,12 +28,13 @@ The following **optional** features are implemented:
    - [ ] Implement a custom switch instead of the default UISwitch.
    - [x] Distance filter should expand as in the real Yelp app
    - [x] Categories should show a subset of the full list with a "See All" row to expand. Category list is [here](http://www.yelp.com/developers/documentation/category_list).
-- [ ] Implement the restaurant detail page.
+- [x] Implement the restaurant detail page.
 
 The following **additional** features are implemented:
 
 - [x] Add placeholder image for businesses without images
 - [x] Add a no results cell to indicate there are no search results for the selected filters
+- [x] Simple cosmetic/color changes
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
@@ -44,10 +45,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://imgur.com/sCJeaAt.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-Infinite scroll:
-<img src='http://imgur.com/e5mDOEJ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://imgur.com/1LgutZg' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

@@ -86,10 +86,16 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     // MARK: - Navigation methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let navigationController = segue.destination as! UINavigationController
-        let filtersViewController = navigationController.topViewController as! FiltersViewController
+        if segue.identifier == "FiltersSegue" {
+            let navigationController = segue.destination as! UINavigationController
+            let filtersViewController = navigationController.topViewController as! FiltersViewController
+            filtersViewController.delegate = self
+        } else if segue.identifier == "DetailsSegue" {
+            let detailsViewController = segue.destination as! DetailsViewController
+            let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
+            detailsViewController.business = businesses[indexPath!.row]
+        }
         
-        filtersViewController.delegate = self
     }
 
     // MARK: - Table view data source methods

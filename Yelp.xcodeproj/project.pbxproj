@@ -17,6 +17,7 @@
 		22AAAA9C1AEA1EC300A544AF /* BusinessesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AAAA9B1AEA1EC300A544AF /* BusinessesViewController.swift */; };
 		31D95BCBCA38716181E686D3 /* Pods_Yelp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C79C0AC126EDAA235847CEA2 /* Pods_Yelp.framework */; };
 		47848697133B87663A122E3D /* Pods_YelpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1000F3975EB43318C1D4FA /* Pods_YelpTests.framework */; };
+		EC0BDBB81E9B05BE00D34CD1 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BDBB71E9B05BE00D34CD1 /* DetailsViewController.swift */; };
 		EC2A517D1E99F16C00CDFA8F /* SortCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2A517C1E99F16C00CDFA8F /* SortCell.swift */; };
 		EC2A517F1E9AD91600CDFA8F /* LabelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2A517E1E9AD91600CDFA8F /* LabelCell.swift */; };
 		ECB161631E98045C0034EA80 /* BusinessCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB161621E98045C0034EA80 /* BusinessCell.swift */; };
@@ -55,6 +56,7 @@
 		9B128C050DE78660DE2A8E75 /* Pods-YelpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YelpTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YelpTests/Pods-YelpTests.release.xcconfig"; sourceTree = "<group>"; };
 		AA3C5CF4FD317D72ABE2AAC4 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C79C0AC126EDAA235847CEA2 /* Pods_Yelp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Yelp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC0BDBB71E9B05BE00D34CD1 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		EC2A517C1E99F16C00CDFA8F /* SortCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortCell.swift; sourceTree = "<group>"; };
 		EC2A517E1E9AD91600CDFA8F /* LabelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelCell.swift; sourceTree = "<group>"; };
 		ECB161621E98045C0034EA80 /* BusinessCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessCell.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 			children = (
 				22AAAA9B1AEA1EC300A544AF /* BusinessesViewController.swift */,
 				ECB161661E98263E0034EA80 /* FiltersViewController.swift */,
+				EC0BDBB71E9B05BE00D34CD1 /* DetailsViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				222D8A5B19CCF9F900D2DB53 /* AppDelegate.swift in Sources */,
 				ECB161651E9820410034EA80 /* SwitchCell.swift in Sources */,
 				ECE135381E9930EB00EEE21B /* DealCell.swift in Sources */,
+				EC0BDBB81E9B05BE00D34CD1 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
